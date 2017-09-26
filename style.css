@@ -6,7 +6,7 @@ body {
   background-color: lightblue;
 }
 
-.all-sales-blocks {
+.all-sales-block {
   border: solid thin red;
   padding: 10px;
   margin: auto;
@@ -40,6 +40,12 @@ body {
   margin: 10px auto;
   padding: 10px;
   /*float: left;*/
+}
+
+#logo {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
 }
 
 #salmon-jpg {

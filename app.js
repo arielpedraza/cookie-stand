@@ -1,197 +1,100 @@
 'use strict';
+var allStores = [];
+var storeHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
 
-var pike = {
-  openingHour: 6,
-  closingHour: 20,
-  storeHours: [],
-  minCust: 23,
-  maxCust: 65,
-  cookiesPerCust: 6.3,
-  cookiesPerHour: [],
-  totalSoldToday: 0,
-  getCustPerHour: function() {
+function CookieStore(minCust, maxCust, cookiesPerCust, storeName) {
+  this.storeName = storeName;
+  //this.openingHour = 6;
+  //this.closingHour = 20;
+  //this.storeHours = [];
+  this.minCust = minCust;
+  this.maxCust = maxCust;
+  this.cookiesPerCust = cookiesPerCust;
+  this.cookiesPerHour = [];
+  this.totalSoldToday = 0;
+  allStores.push(this);
+
+  this.getCustPerHour = function() {
     return (Math.floor(Math.random() * (this.maxCust - this.minCust + 1)) + this.minCust);
-  },
-  initialize: function() {
-    for (var i = 0; i < (this.closingHour - this.openingHour); i++) {
+  };
+  this.initialize = function() {
+    for (var i = 0; i < storeHours.length; i++) {
       this.cookiesPerHour[i] = Math.ceil(this.cookiesPerCust * this.getCustPerHour());
-      if((this.openingHour + i) >= 10){
-        this.storeHours[i] = (this.openingHour + i) + ':00';
-      } else {
-        this.storeHours[i] = '0' + (this.openingHour + i) + ':00';
-      }
+      // if((this.openingHour + i) >= 10){
+      //   this.storeHours[i] = (this.openingHour + i) + ':00';
+      // } else {
+      //   this.storeHours[i] = '0' + (this.openingHour + i) + ':00';
+      // }
       this.totalSoldToday += this.cookiesPerHour[i];
     }
-  },
-  render: function() {
+  };
+  this.render = function() {
     this.initialize();
-    var newEl;
-    var targetUl = document.getElementById('pike');
+    var newTrEl = document.createElement('tr');
+    var newTdEl = document.createElement('td');
+    newTdEl.textContent = this.storeName;
+    newTrEl.appendChild(newTdEl);
     for(var i in this.cookiesPerHour){
-      newEl = document.createElement('li');
-      newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
-      targetUl.appendChild(newEl);
+      newTdEl = document.createElement('td');
+      newTdEl.textContent = this.cookiesPerHour[i];
+      newTrEl.appendChild(newTdEl);
     }
-    newEl = document.createElement('li');
-    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
-    targetUl.appendChild(newEl);
+    newTdEl = document.createElement('td');
+    newTdEl.textContent = this.totalSoldToday;
+    newTrEl.appendChild(newTdEl);
+    document.getElementById('sales-table').appendChild(newTrEl);
+  };
+}
+
+function makeHeaderRow(){
+  var newTrEl = document.createElement('tr');
+  var newThEl = document.createElement('th');
+  newThEl.textContent = '';
+  newTrEl.appendChild(newThEl);
+  for(var i in storeHours){
+    newThEl = document.createElement('th');
+    newThEl.textContent = storeHours[i];
+    newTrEl.appendChild(newThEl);
   }
+  newThEl = document.createElement('th');
+  newThEl.textContent = 'Total';
+  newTrEl.appendChild(newThEl);
+  document.getElementById('sales-table').appendChild(newTrEl);
 };
 
-var seaTac = {
-  openingHour: 6,
-  closingHour: 20,
-  storeHours: [],
-  minCust: 3,
-  maxCust: 24,
-  cookiesPerCust: 1.2,
-  cookiesPerHour: [],
-  totalSoldToday: 0,
-  getCustPerHour: function() {
-    return (Math.floor(Math.random() * (this.maxCust - this.minCust + 1)) + this.minCust);
-  },
-  initialize: function() {
-    for (var i = 0; i < (this.closingHour - this.openingHour); i++) {
-      this.cookiesPerHour[i] = Math.ceil(this.cookiesPerCust * this.getCustPerHour());
-      if((this.openingHour + i) >= 10){
-        this.storeHours[i] = (this.openingHour + i) + ':00';
-      } else {
-        this.storeHours[i] = '0' + (this.openingHour + i) + ':00';
-      }
-      this.totalSoldToday += this.cookiesPerHour[i];
+function calculateHourTotals(){
+  var dailyTotal = 0;
+  var newTrEl = document.createElement('tr');
+  var newTdEl = document.createElement('td');
+  newTdEl.textContent = 'Total:';
+  newTrEl.appendChild(newTdEl);
+  for(var i in storeHours){
+    var hourTotal = 0;
+    for(var j in allStores){
+      hourTotal += allStores[j].cookiesPerHour[i];
     }
-  },
-  render: function() {
-    this.initialize();
-    var newEl;
-    var targetUl = document.getElementById('seatac');
-    for(var i in this.cookiesPerHour){
-      newEl = document.createElement('li');
-      newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
-      targetUl.appendChild(newEl);
-    }
-    newEl = document.createElement('li');
-    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
-    targetUl.appendChild(newEl);
+    dailyTotal += hourTotal;
+    newTdEl = document.createElement('td');
+    newTdEl.textContent = hourTotal;
+    newTrEl.appendChild(newTdEl);
   }
+  newTdEl = document.createElement('td');
+  newTdEl.textContent = dailyTotal;
+  newTrEl.appendChild(newTdEl);
+  document.getElementById('sales-table').appendChild(newTrEl);
 };
 
-var seattleCenter = {
-  openingHour: 6,
-  closingHour: 20,
-  storeHours: [],
-  minCust: 11,
-  maxCust: 38,
-  cookiesPerCust: 3.7,
-  cookiesPerHour: [],
-  totalSoldToday: 0,
-  getCustPerHour: function() {
-    return (Math.floor(Math.random() * (this.maxCust - this.minCust + 1)) + this.minCust);
-  },
-  initialize: function() {
-    for (var i = 0; i < (this.closingHour - this.openingHour); i++) {
-      this.cookiesPerHour[i] = Math.ceil(this.cookiesPerCust * this.getCustPerHour());
-      if((this.openingHour + i) >= 10){
-        this.storeHours[i] = (this.openingHour + i) + ':00';
-      } else {
-        this.storeHours[i] = '0' + (this.openingHour + i) + ':00';
-      }
-      this.totalSoldToday += this.cookiesPerHour[i];
-    }
-  },
-  render: function() {
-    this.initialize();
-    var newEl;
-    var targetUl = document.getElementById('seacen');
-    for(var i in this.cookiesPerHour){
-      newEl = document.createElement('li');
-      newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
-      targetUl.appendChild(newEl);
-    }
-    newEl = document.createElement('li');
-    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
-    targetUl.appendChild(newEl);
-  }
-};
+var pike = new CookieStore(23, 65, 6.3, '1st and Pike');
+var seaTac = new CookieStore(3, 24, 1.2, 'SeaTac Airport');
+var seaCen = new CookieStore(11, 38, 3.7, 'Seattle Center');
+var capHill = new CookieStore(20, 38, 2.3, 'Capitol Hill');
+var alki = new CookieStore(2, 16, 4.6, 'Alki');
 
-var capHill = {
-  openingHour: 6,
-  closingHour: 20,
-  storeHours: [],
-  minCust: 20,
-  maxCust: 38,
-  cookiesPerCust: 2.3,
-  cookiesPerHour: [],
-  totalSoldToday: 0,
-  getCustPerHour: function() {
-    return (Math.floor(Math.random() * (this.maxCust - this.minCust + 1)) + this.minCust);
-  },
-  initialize: function() {
-    for (var i = 0; i < (this.closingHour - this.openingHour); i++) {
-      this.cookiesPerHour[i] = Math.ceil(this.cookiesPerCust * this.getCustPerHour());
-      if((this.openingHour + i) >= 10){
-        this.storeHours[i] = (this.openingHour + i) + ':00';
-      } else {
-        this.storeHours[i] = '0' + (this.openingHour + i) + ':00';
-      }
-      this.totalSoldToday += this.cookiesPerHour[i];
-    }
-  },
-  render: function() {
-    this.initialize();
-    var newEl;
-    var targetUl = document.getElementById('caphill');
-    for(var i in this.cookiesPerHour){
-      newEl = document.createElement('li');
-      newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
-      targetUl.appendChild(newEl);
-    }
-    newEl = document.createElement('li');
-    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
-    targetUl.appendChild(newEl);
-  }
-};
-
-var alki = {
-  openingHour: 6,
-  closingHour: 20,
-  storeHours: [],
-  minCust: 2,
-  maxCust: 16,
-  cookiesPerCust: 4.6,
-  cookiesPerHour: [],
-  totalSoldToday: 0,
-  getCustPerHour: function() {
-    return (Math.floor(Math.random() * (this.maxCust - this.minCust + 1)) + this.minCust);
-  },
-  initialize: function() {
-    for (var i = 0; i < (this.closingHour - this.openingHour); i++) {
-      this.cookiesPerHour[i] = Math.ceil(this.cookiesPerCust * this.getCustPerHour());
-      if((this.openingHour + i) >= 10){
-        this.storeHours[i] = (this.openingHour + i) + ':00';
-      } else {
-        this.storeHours[i] = '0' + (this.openingHour + i) + ':00';
-      }
-      this.totalSoldToday += this.cookiesPerHour[i];
-    }
-  },
-  render: function() {
-    this.initialize();
-    var newEl;
-    var targetUl = document.getElementById('alki');
-    for(var i in this.cookiesPerHour){
-      newEl = document.createElement('li');
-      newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
-      targetUl.appendChild(newEl);
-    }
-    newEl = document.createElement('li');
-    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
-    targetUl.appendChild(newEl);
-  }
-};
-
+makeHeaderRow();
 pike.render();
 seaTac.render();
-seattleCenter.render();
+seaCen.render();
 capHill.render();
 alki.render();
+calculateHourTotals();
+//end of file
