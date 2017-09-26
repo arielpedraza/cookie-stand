@@ -4,9 +4,6 @@ var storeHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2p
 
 function CookieStore(minCust, maxCust, cookiesPerCust, storeName) {
   this.storeName = storeName;
-  //this.openingHour = 6;
-  //this.closingHour = 20;
-  //this.storeHours = [];
   this.minCust = minCust;
   this.maxCust = maxCust;
   this.cookiesPerCust = cookiesPerCust;
@@ -20,11 +17,6 @@ function CookieStore(minCust, maxCust, cookiesPerCust, storeName) {
   this.initialize = function() {
     for (var i = 0; i < storeHours.length; i++) {
       this.cookiesPerHour[i] = Math.ceil(this.cookiesPerCust * this.getCustPerHour());
-      // if((this.openingHour + i) >= 10){
-      //   this.storeHours[i] = (this.openingHour + i) + ':00';
-      // } else {
-      //   this.storeHours[i] = '0' + (this.openingHour + i) + ':00';
-      // }
       this.totalSoldToday += this.cookiesPerHour[i];
     }
   };

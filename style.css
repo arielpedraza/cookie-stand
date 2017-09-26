@@ -14,16 +14,6 @@ body {
   max-width: 1200px;
 }
 
-.sales-data {
-  background-color: white;
-  border: solid thick red;
-  display: inline-block;
-  margin: 10px auto;
-  padding: 10px;
-  width: 250px;
-  text-align: center;
-}
-
 .location {
   background-color: white;
   border: solid thick red;
@@ -54,4 +44,10 @@ body {
   display: block;
   margin: 10px auto;
   padding: 10px;
+}
+
+table, th, td {
+  border: solid thin black;
+  padding: 5px;
+  text-align: right;
 }
