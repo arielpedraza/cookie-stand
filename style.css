@@ -1,0 +1,51 @@
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  background-color: lightblue;
+}
+
+.all-sales-blocks {
+  border: solid thin red;
+  padding: 10px;
+  margin: auto;
+  min-width: 600px;
+  max-width: 1200px;
+}
+
+.sales-data {
+  background-color: white;
+  border: solid thick red;
+  display: inline-block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 250px;
+  text-align: center;
+}
+
+.location {
+  background-color: white;
+  border: solid thick red;
+  display: inline-block;
+  margin: 10px auto;
+  padding: 10px;
+  /*float: right;*/
+}
+
+.content {
+  background-color: white;
+  border: solid thick red;
+  display: inline-block;
+  margin: 10px auto;
+  padding: 10px;
+  /*float: left;*/
+}
+
+#salmon-jpg {
+  clear: both;
+  border: solid thick red;
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+}
