@@ -32,6 +32,9 @@ var pike = {
       newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
       targetUl.appendChild(newEl);
     }
+    newEl = document.createElement('li');
+    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
+    targetUl.appendChild(newEl);
   }
 };
 
@@ -67,6 +70,9 @@ var seaTac = {
       newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
       targetUl.appendChild(newEl);
     }
+    newEl = document.createElement('li');
+    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
+    targetUl.appendChild(newEl);
   }
 };
 
@@ -102,6 +108,9 @@ var seattleCenter = {
       newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
       targetUl.appendChild(newEl);
     }
+    newEl = document.createElement('li');
+    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
+    targetUl.appendChild(newEl);
   }
 };
 
@@ -137,6 +146,9 @@ var capHill = {
       newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
       targetUl.appendChild(newEl);
     }
+    newEl = document.createElement('li');
+    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
+    targetUl.appendChild(newEl);
   }
 };
 
@@ -172,6 +184,9 @@ var alki = {
       newEl.appendChild(document.createTextNode(this.storeHours[i] + ' - ' + this.cookiesPerHour[i]));
       targetUl.appendChild(newEl);
     }
+    newEl = document.createElement('li');
+    newEl.appendChild(document.createTextNode('Total: ' + this.totalSoldToday));
+    targetUl.appendChild(newEl);
   }
 };
 
