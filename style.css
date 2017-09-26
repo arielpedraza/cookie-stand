@@ -23,3 +23,29 @@ body {
   width: 250px;
   text-align: center;
 }
+
+.location {
+  background-color: white;
+  border: solid thick red;
+  display: inline-block;
+  margin: 10px auto;
+  padding: 10px;
+  /*float: right;*/
+}
+
+.content {
+  background-color: white;
+  border: solid thick red;
+  display: inline-block;
+  margin: 10px auto;
+  padding: 10px;
+  /*float: left;*/
+}
+
+#salmon-jpg {
+  clear: both;
+  border: solid thick red;
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+}
