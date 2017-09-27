@@ -6,22 +6,12 @@ body {
   background-color: lightblue;
 }
 
-.all-sales-blocks {
+.all-sales-block {
   border: solid thin red;
   padding: 10px;
   margin: auto;
   min-width: 600px;
   max-width: 1200px;
-}
-
-.sales-data {
-  background-color: white;
-  border: solid thick red;
-  display: inline-block;
-  margin: 10px auto;
-  padding: 10px;
-  width: 250px;
-  text-align: center;
 }
 
 .location {
@@ -42,10 +32,22 @@ body {
   /*float: left;*/
 }
 
+#logo {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+}
+
 #salmon-jpg {
   clear: both;
   border: solid thick red;
   display: block;
   margin: 10px auto;
   padding: 10px;
+}
+
+table, th, td {
+  border: solid thin black;
+  padding: 5px;
+  text-align: right;
 }
