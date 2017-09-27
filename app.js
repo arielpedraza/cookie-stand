@@ -1,8 +1,9 @@
 'use strict';
+var elForm = document.getElementById('add-modify-form');
 var allStores = [];
 var storeHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
 
-function CookieStore(minCust, maxCust, cookiesPerCust, storeName) {
+function CookieStore(storeName, minCust, maxCust, cookiesPerCust) {
   this.storeName = storeName;
   this.minCust = minCust;
   this.maxCust = maxCust;
@@ -76,17 +77,39 @@ function calculateHourTotals(){
   document.getElementById('sales-table').appendChild(newTrEl);
 };
 
-var pike = new CookieStore(23, 65, 6.3, '1st and Pike');
-var seaTac = new CookieStore(3, 24, 1.2, 'SeaTac Airport');
-var seaCen = new CookieStore(11, 38, 3.7, 'Seattle Center');
-var capHill = new CookieStore(20, 38, 2.3, 'Capitol Hill');
-var alki = new CookieStore(2, 16, 4.6, 'Alki');
+function addModifyTable(event){
+  var input1 = event.target.storename.value;
+  var input2 = parseInt(event.target.mincust.value, 10);
+  var input3 = parseInt(event.target.maxcust.value, 10);
+  var input4 = parseInt(event.target.avgcookie.value, 10);
+  event.preventDefault();
+  if (!input1 || !input2 || !input3 || !input4){
+    return alert('Fields cannot be empty!');
+  }
+  var newStore = new CookieStore(input1, input2, input3, input4);
+  input1 = null;
+  input2 = null;
+  input3 = null;
+  input4 = null;
+  newStore.render();
+};
 
-makeHeaderRow();
-pike.render();
-seaTac.render();
-seaCen.render();
-capHill.render();
-alki.render();
-calculateHourTotals();
+function masterRender(){
+  makeHeaderRow();
+  for (var i in allStores){
+    allStores[i].render();
+  }
+  calculateHourTotals();
+};
+
+new CookieStore('1st and Pike', 23, 65, 6.3);
+new CookieStore('SeaTac Airport', 3, 24, 1.2);
+new CookieStore('Seattle Center', 11, 38, 3.7);
+new CookieStore('Capitol Hill', 20, 38, 2.3);
+new CookieStore('Alki', 2, 16, 4.6);
+
+masterRender();
+
+elForm.addEventListener('submit', addModifyTable);
+
 //end of file
