@@ -111,6 +111,8 @@ function addModifyTable(event){
       childEl = childEl.nextSibling;
       childEl.textContent = allStores[tempIndex].cookiesPerHour[i];
     }
+    childEl = childEl.nextSibling;
+    childEl.textContent = allStores[tempIndex].totalSoldToday;
     //remove and replace last row
     removeEl = document.getElementById('lastrow');
     parentEl = removeEl.parentNode;
