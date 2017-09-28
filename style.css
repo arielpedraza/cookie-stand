@@ -10,8 +10,8 @@ body {
   border: solid thin red;
   padding: 10px;
   margin: auto;
-  min-width: 600px;
-  max-width: 1200px;
+  min-width: 800px;
+  max-width: 1500px;
 }
 
 .location {

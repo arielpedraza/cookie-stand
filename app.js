@@ -1,8 +1,10 @@
 'use strict';
+var elForm = document.getElementById('add-modify-form');
 var allStores = [];
 var storeHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
+var allStoreNames = [];
 
-function CookieStore(minCust, maxCust, cookiesPerCust, storeName) {
+function CookieStore(storeName, minCust, maxCust, cookiesPerCust) {
   this.storeName = storeName;
   this.minCust = minCust;
   this.maxCust = maxCust;
@@ -34,6 +36,7 @@ function CookieStore(minCust, maxCust, cookiesPerCust, storeName) {
     newTdEl = document.createElement('td');
     newTdEl.textContent = this.totalSoldToday;
     newTrEl.appendChild(newTdEl);
+    newTrEl.setAttribute('id', this.storeName);
     document.getElementById('sales-table').appendChild(newTrEl);
   };
 }
@@ -51,6 +54,7 @@ function makeHeaderRow(){
   newThEl = document.createElement('th');
   newThEl.textContent = 'Total';
   newTrEl.appendChild(newThEl);
+  newTrEl.setAttribute('id', 'firstrow');
   document.getElementById('sales-table').appendChild(newTrEl);
 };
 
@@ -73,20 +77,77 @@ function calculateHourTotals(){
   newTdEl = document.createElement('td');
   newTdEl.textContent = dailyTotal;
   newTrEl.appendChild(newTdEl);
+  newTrEl.setAttribute('id', 'lastrow');
   document.getElementById('sales-table').appendChild(newTrEl);
 };
 
-var pike = new CookieStore(23, 65, 6.3, '1st and Pike');
-var seaTac = new CookieStore(3, 24, 1.2, 'SeaTac Airport');
-var seaCen = new CookieStore(11, 38, 3.7, 'Seattle Center');
-var capHill = new CookieStore(20, 38, 2.3, 'Capitol Hill');
-var alki = new CookieStore(2, 16, 4.6, 'Alki');
+function addModifyTable(event){
+  var input1 = event.target.storename.value;
+  var input2 = parseInt(event.target.mincust.value, 10);
+  var input3 = parseInt(event.target.maxcust.value, 10);
+  var input4 = parseInt(event.target.avgcookie.value, 10);
+  var removeEl, parentEl, childEl;
+  event.preventDefault();
+  if (!input1 || !input2 || !input3 || !input4){
+    return alert('Fields cannot be empty!');
+  }
+  for (var i in allStores){
+    allStoreNames[i] = allStores[i].storeName;
+  }
+  if (allStoreNames.includes(input1)){
+    //console.log('Store already exists');
+    //Update existing store's values
+    var tempIndex = allStoreNames.indexOf(input1);
+    allStores[tempIndex].minCust = input2;
+    allStores[tempIndex].maxCust = input3;
+    allStores[tempIndex].cookiesPerCust = input4;
+    allStores[tempIndex].totalSoldToday = 0;
+    //remove and replace existing store
+    removeEl = document.getElementById(input1);
+    parentEl = removeEl.parentNode;
+    childEl = removeEl.firstChild;
+    allStores[tempIndex].initialize();
+    for(i in allStores[tempIndex].cookiesPerHour){
+      childEl = childEl.nextSibling;
+      childEl.textContent = allStores[tempIndex].cookiesPerHour[i];
+    }
+    childEl = childEl.nextSibling;
+    childEl.textContent = allStores[tempIndex].totalSoldToday;
+    //remove and replace last row
+    removeEl = document.getElementById('lastrow');
+    parentEl = removeEl.parentNode;
+    parentEl.removeChild(removeEl);
+    calculateHourTotals();
+  } else {
+    var newStore = new CookieStore(input1, input2, input3, input4);
+    removeEl = document.getElementById('lastrow');
+    parentEl = removeEl.parentNode;
+    parentEl.removeChild(removeEl);
+    newStore.render();
+    calculateHourTotals();
+  }
+  input1 = null;
+  input2 = null;
+  input3 = null;
+  input4 = null;
+};
 
-makeHeaderRow();
-pike.render();
-seaTac.render();
-seaCen.render();
-capHill.render();
-alki.render();
-calculateHourTotals();
+function masterRender(){
+  makeHeaderRow();
+  for (var i in allStores){
+    allStores[i].render();
+  }
+  calculateHourTotals();
+};
+
+new CookieStore('1st and Pike', 23, 65, 6.3);
+new CookieStore('SeaTac Airport', 3, 24, 1.2);
+new CookieStore('Seattle Center', 11, 38, 3.7);
+new CookieStore('Capitol Hill', 20, 38, 2.3);
+new CookieStore('Alki', 2, 16, 4.6);
+
+masterRender();
+
+elForm.addEventListener('submit', addModifyTable);
+
 //end of file

@@ -24,6 +24,21 @@
 
     <h2>Projected cookie demand per hour for each location:</h2>
     <div class="all-sales-block">
+      <form id="add-modify-form">
+        <fieldset>
+          <legend>Add or Modify Store</legend>
+          <label for="storename">Store Name:</label>
+          <input type="text" name="storename">
+          <label for="mincust">Min Customer Traffic:</label>
+          <input type="text" name="mincust">
+          <label for="maxcust">Max Customer Traffic:</label>
+          <input type="text" name="maxcust">
+          <label for="avgcookie">Cookies Per Customer:</label>
+          <input type="text" name="avgcookie">
+          <button type="submit">Add/Modify</button>
+        </fieldset>
+      </form>
+
       <table id="sales-table"></table>
     </div>
     <script type="text/javascript" src="app.js"></script>
