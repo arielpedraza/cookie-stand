@@ -1,10 +1,12 @@
 'use strict';
 var elForm = document.getElementById('add-modify-form');
-var allStores = [];
+var elTable = document.getElementById('sales-table');
 var storeHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
+var allStores = [];
 var allStoreNames = [];
+var newTdEl, newThEl;
 
-function CookieStore(storeName, minCust, maxCust, cookiesPerCust) {
+function CookieStore(storeName, minCust, maxCust, cookiesPerCust){
   this.storeName = storeName;
   this.minCust = minCust;
   this.maxCust = maxCust;
@@ -12,120 +14,114 @@ function CookieStore(storeName, minCust, maxCust, cookiesPerCust) {
   this.cookiesPerHour = [];
   this.totalSoldToday = 0;
   allStores.push(this);
+  allStoreNames.push(this.storeName.toLowerCase());
+}
 
-  this.getCustPerHour = function() {
-    return (Math.floor(Math.random() * (this.maxCust - this.minCust + 1)) + this.minCust);
-  };
-  this.initialize = function() {
-    for (var i = 0; i < storeHours.length; i++) {
-      this.cookiesPerHour[i] = Math.ceil(this.cookiesPerCust * this.getCustPerHour());
-      this.totalSoldToday += this.cookiesPerHour[i];
-    }
-  };
-  this.render = function() {
-    this.initialize();
-    var newTrEl = document.createElement('tr');
-    var newTdEl = document.createElement('td');
-    newTdEl.textContent = this.storeName;
-    newTrEl.appendChild(newTdEl);
-    for(var i in this.cookiesPerHour){
-      newTdEl = document.createElement('td');
-      newTdEl.textContent = this.cookiesPerHour[i];
-      newTrEl.appendChild(newTdEl);
-    }
+CookieStore.prototype.getCustPerHour = function(){
+  return (Math.floor(Math.random() * (this.maxCust - this.minCust + 1)) + this.minCust);
+};
+
+CookieStore.prototype.initialize = function(){
+  for (var i = 0; i < storeHours.length; i++) {
+    this.cookiesPerHour[i] = Math.ceil(this.cookiesPerCust * this.getCustPerHour());
+    this.totalSoldToday += this.cookiesPerHour[i];
+  }
+};
+
+CookieStore.prototype.render = function () {
+  this.initialize();
+  var newTrEl = document.createElement('tr');
+  createCell(newTrEl, this.storeName, true);
+  for(var i in this.cookiesPerHour){
+    createCell(newTrEl, this.cookiesPerHour[i], false);
+  }
+  createCell(newTrEl, this.totalSoldToday, false);
+  newTrEl.setAttribute('id', this.storeName.toLowerCase());
+  elTable.appendChild(newTrEl);
+};
+
+CookieStore.prototype.editSales = function(a, b, c){
+  this.minCust = a;
+  this.maxCust = b;
+  this.cookiesPerCust = c;
+  this.totalSoldToday = 0;
+  this.initialize();
+};
+
+function createCell(row, data, isHeader){
+  if(isHeader){
+    newThEl = document.createElement('th');
+    newThEl.textContent = data;
+    row.appendChild(newThEl);
+  }else{
     newTdEl = document.createElement('td');
-    newTdEl.textContent = this.totalSoldToday;
-    newTrEl.appendChild(newTdEl);
-    newTrEl.setAttribute('id', this.storeName);
-    document.getElementById('sales-table').appendChild(newTrEl);
-  };
+    newTdEl.textContent = data;
+    row.appendChild(newTdEl);
+  }
 }
 
 function makeHeaderRow(){
   var newTrEl = document.createElement('tr');
-  var newThEl = document.createElement('th');
-  newThEl.textContent = '';
-  newTrEl.appendChild(newThEl);
+  createCell(newTrEl, 'Store Locations', true);
   for(var i in storeHours){
-    newThEl = document.createElement('th');
-    newThEl.textContent = storeHours[i];
-    newTrEl.appendChild(newThEl);
+    createCell(newTrEl, storeHours[i], true);
   }
-  newThEl = document.createElement('th');
-  newThEl.textContent = 'Total';
-  newTrEl.appendChild(newThEl);
+  createCell(newTrEl, 'Total', true);
   newTrEl.setAttribute('id', 'firstrow');
-  document.getElementById('sales-table').appendChild(newTrEl);
+  elTable.appendChild(newTrEl);
 };
 
 function calculateHourTotals(){
   var dailyTotal = 0;
   var newTrEl = document.createElement('tr');
-  var newTdEl = document.createElement('td');
-  newTdEl.textContent = 'Total:';
-  newTrEl.appendChild(newTdEl);
+  createCell(newTrEl, 'Total: ', true);
   for(var i in storeHours){
     var hourTotal = 0;
     for(var j in allStores){
       hourTotal += allStores[j].cookiesPerHour[i];
     }
     dailyTotal += hourTotal;
-    newTdEl = document.createElement('td');
-    newTdEl.textContent = hourTotal;
-    newTrEl.appendChild(newTdEl);
+    createCell(newTrEl, hourTotal, false);
   }
-  newTdEl = document.createElement('td');
-  newTdEl.textContent = dailyTotal;
-  newTrEl.appendChild(newTdEl);
+  createCell(newTrEl, dailyTotal, false);
   newTrEl.setAttribute('id', 'lastrow');
-  document.getElementById('sales-table').appendChild(newTrEl);
+  elTable.appendChild(newTrEl);
 };
 
 function addModifyTable(event){
+  event.preventDefault();
   var input1 = event.target.storename.value;
   var input2 = parseInt(event.target.mincust.value, 10);
   var input3 = parseInt(event.target.maxcust.value, 10);
   var input4 = parseInt(event.target.avgcookie.value, 10);
   var removeEl, parentEl, childEl;
-  event.preventDefault();
   if (!input1 || !input2 || !input3 || !input4){
     return alert('Fields cannot be empty!');
+  }else if (input2 < 0 || input3 < 0 || input4 < 0){
+    return alert('Fields cannot be less than zero!');
+  }else if (input2 > input3){
+    return alert('Min customer cannot be more than max customer!');
   }
-  for (var i in allStores){
-    allStoreNames[i] = allStores[i].storeName;
-  }
-  if (allStoreNames.includes(input1)){
-    //console.log('Store already exists');
-    //Update existing store's values
-    var tempIndex = allStoreNames.indexOf(input1);
-    allStores[tempIndex].minCust = input2;
-    allStores[tempIndex].maxCust = input3;
-    allStores[tempIndex].cookiesPerCust = input4;
-    allStores[tempIndex].totalSoldToday = 0;
-    //remove and replace existing store
-    removeEl = document.getElementById(input1);
+  if (!allStoreNames.includes(input1.toLowerCase())){
+    var newStore = new CookieStore(input1, input2, input3, input4);
+    newStore.render();
+  } else {
+    removeEl = document.getElementById(input1.toLowerCase());
     parentEl = removeEl.parentNode;
     childEl = removeEl.firstChild;
-    allStores[tempIndex].initialize();
-    for(i in allStores[tempIndex].cookiesPerHour){
+    var tempIndex = allStoreNames.indexOf(input1.toLowerCase());
+    allStores[tempIndex].editSales(input2, input3, input4);
+    for(var i in allStores[tempIndex].cookiesPerHour){
       childEl = childEl.nextSibling;
       childEl.textContent = allStores[tempIndex].cookiesPerHour[i];
     }
     childEl = childEl.nextSibling;
     childEl.textContent = allStores[tempIndex].totalSoldToday;
-    //remove and replace last row
-    removeEl = document.getElementById('lastrow');
-    parentEl = removeEl.parentNode;
-    parentEl.removeChild(removeEl);
-    calculateHourTotals();
-  } else {
-    var newStore = new CookieStore(input1, input2, input3, input4);
-    removeEl = document.getElementById('lastrow');
-    parentEl = removeEl.parentNode;
-    parentEl.removeChild(removeEl);
-    newStore.render();
-    calculateHourTotals();
   }
+  removeEl = document.getElementById('lastrow');
+  parentEl = removeEl.parentNode;
+  parentEl.removeChild(removeEl);
+  calculateHourTotals();
   input1 = null;
   input2 = null;
   input3 = null;
@@ -149,5 +145,3 @@ new CookieStore('Alki', 2, 16, 4.6);
 masterRender();
 
 elForm.addEventListener('submit', addModifyTable);
-
-//end of file
