@@ -95,7 +95,7 @@ function addModifyTable(event){
     allStoreNames[i] = allStores[i].storeName;
   }
   if (allStoreNames.includes(input1)){
-    console.log('Store already exists');
+    //console.log('Store already exists');
     //Update existing store's values
     var tempIndex = allStoreNames.indexOf(input1);
     allStores[tempIndex].minCust = input2;
