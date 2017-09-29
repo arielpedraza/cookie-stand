@@ -2,45 +2,88 @@
   font-family: 'Open Sans', sans-serif;
 }
 
+header {
+  background-color: lightgray;
+  border: solid thin black;
+  padding: 10px;
+}
+
 body {
-  background-color: lightblue;
+  background-color: #66cccc;
+  border: solid thin black;
+}
+
+nav {
+  clear: right;
+  border: solid thin black;
+  display: inline-block;
+  float: right;
+  padding: 10px 20px;
+}
+
+nav li {
+  display: inline-block;
+}
+
+main {
+  border: solid thin black;
+  width: 1200px;
+  margin: 0 auto;
+}
+
+footer {
+  background-color: lightgray;
+  border: solid thin black;
+}
+
+.name {
+  text-decoration: underline;
 }
 
 .all-sales-block {
-  border: solid thin red;
+  border: solid thin black;
   padding: 10px;
   margin: auto;
   min-width: 800px;
   max-width: 1500px;
 }
 
-.location {
-  background-color: white;
-  border: solid thick red;
+#content {
   display: inline-block;
-  margin: 10px auto;
-  padding: 10px;
-  /*float: right;*/
+  float: left;
+  border: solid thin black;
+  padding: 20px;
+  width: 700px;
 }
 
-.content {
-  background-color: white;
-  border: solid thick red;
+#locations {
   display: inline-block;
-  margin: 10px auto;
-  padding: 10px;
-  /*float: left;*/
+  float: right;
+  border: solid thin black;
+  padding: 20px;
+  width: 400px;
+}
+
+img {
+  width: 90%;
 }
 
 #logo {
   width: 100px;
   height: 100px;
   display: inline-block;
+  border: solid thin black;
+}
+
+#companyname {
+  display: inline-block;
+  text-align: center;
+  font-family: 'Play', sans-serif;
 }
 
 #salmon-jpg {
   clear: both;
-  border: solid thick red;
+  border: solid thin black;
   display: block;
   margin: 10px auto;
   padding: 10px;
